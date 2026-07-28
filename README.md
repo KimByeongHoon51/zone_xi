@@ -8,6 +8,11 @@
 감독이 된 것처럼 11명의 활동 영역을 직접 칠하고, **공백(빈 구역)** 과 **과밀(겹친 구역)** 이
 실시간으로 드러나는 것을 보며 전술을 다듬는 인터랙티브 웹서비스입니다.
 
+### 🔗 링크
+
+- **배포 URL(플레이):** https://kimbyeonghoon51.github.io/zone_xi/
+- **GitHub 저장소:** https://github.com/KimByeongHoon51/zone_xi
+
 ---
 
 ## 🎯 핵심 루프
