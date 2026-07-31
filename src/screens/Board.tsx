@@ -4,6 +4,7 @@ import { useStore } from '../state/store';
 import { PitchGrid } from '../components/pitch/PitchGrid';
 import { Toolbar } from '../components/board/Toolbar';
 import { LiveFeedback } from '../components/board/LiveFeedback';
+import { SimilarityCard } from '../components/board/SimilarityCard';
 import { TileBottomSheet } from '../components/board/TileBottomSheet';
 import { COPY } from '../constants/copy';
 
@@ -61,8 +62,9 @@ export function Board() {
         <main className="relative flex min-w-0 flex-1 items-center justify-center">
           <PitchGrid onHoverTile={setHovered} />
         </main>
-        <div className="flex min-h-0 w-[300px] shrink-0 flex-col gap-3">
+        <div className="flex min-h-0 w-[300px] shrink-0 flex-col gap-3 overflow-y-auto pr-0.5">
           <LiveFeedback />
+          <SimilarityCard variant="panel" />
           <TileBottomSheet idx={hovered} />
         </div>
       </div>

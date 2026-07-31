@@ -14,6 +14,7 @@ import {
   GK_NO,
   type FormationName,
 } from '../constants/formations';
+import { CONFIG } from '../constants/config';
 
 const ROWS = 14;
 const COLS = 7;
@@ -105,12 +106,16 @@ export const useStore = create<Store>((set, get) => ({
     });
   },
   paintTile: (idx) => {
-    const { phase, activePlayer, tool, zones } = get();
+    const { phase, activePlayer, tool, zones, resolution } = get();
     if (activePlayer == null || activePlayer === GK_NO) return;
     const prev = zones[phase][activePlayer] ?? new Set<number>();
+    const B = CONFIG.tileBudget(resolution.rows, resolution.cols);
     const next = new Set(prev);
     if (tool === 'eraser') next.delete(idx);
-    else next.add(idx);
+    else {
+      if (prev.size >= B && !prev.has(idx)) return; // 예산 소진 → 색칠 차단
+      next.add(idx);
+    }
     if (next.size === prev.size && tool !== 'eraser') return; // 변화 없음
     set({
       zones: {
@@ -120,12 +125,16 @@ export const useStore = create<Store>((set, get) => ({
     });
   },
   paintTiles: (idxs) => {
-    const { phase, activePlayer, tool, zones } = get();
+    const { phase, activePlayer, tool, zones, resolution } = get();
     if (activePlayer == null || activePlayer === GK_NO) return;
+    const B = CONFIG.tileBudget(resolution.rows, resolution.cols);
     const next = new Set(zones[phase][activePlayer] ?? new Set<number>());
     for (const idx of idxs) {
       if (tool === 'eraser') next.delete(idx);
-      else next.add(idx);
+      else {
+        if (next.size >= B) break; // 예산 한도까지만 채움
+        next.add(idx);
+      }
     }
     set({
       zones: {

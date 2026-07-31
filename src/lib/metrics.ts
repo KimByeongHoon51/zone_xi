@@ -6,7 +6,8 @@ import type { PhaseZones } from '../state/types';
 import { CONFIG } from '../constants/config';
 
 export interface Metrics {
-  coveragePct: number; // 커버리지 %
+  coveragePct: number; // 면적 커버리지 %
+  riskWeightedCoverage: number; // C: 위험 가중 커버리지 %
   riskZoneCount: number; // 위험 구역 수 (노출)
   overcrowdTiles: number; // 과밀 칸 수 (노출)
   balance: number; // -1(우측)..+1(좌측)
@@ -16,6 +17,7 @@ export interface Metrics {
   // 내부용 (노출 금지)
   riskExposure: number;
   zoneCoverRatio: Record<string, number>;
+  coverMass: Record<string, number>; // 15구역별 커버 질량 (B 유사도 입력)
   attShare: number;
   midShare: number;
   defShare: number;
@@ -42,13 +44,26 @@ export function computeMetrics(
   let overcrowdTiles = 0;
   for (const c of cov.values()) if (c >= CONFIG.OVERCROWD) overcrowdTiles++;
 
-  // 구역별 커버 비율
+  // C) 위험 가중 커버리지 (타일 단위): Σ(덮인 타일 가중치)/Σ(전체 가중치)
+  let riskTotal = 0,
+    riskCovered = 0;
+  for (let i = 0; i < total; i++) {
+    const w = ZONE_WEIGHTS[tileToZone(i, rows, cols)];
+    riskTotal += w;
+    if ((cov.get(i) ?? 0) >= 1) riskCovered += w;
+  }
+  const riskWeightedCoverage = Math.round((riskCovered / riskTotal) * 100);
+
+  // 구역별 커버 비율 + 커버 질량(B용)
   const zTotal: Record<string, number> = {},
-    zCov: Record<string, number> = {};
+    zCov: Record<string, number> = {},
+    coverMass: Record<string, number> = {};
   for (let i = 0; i < total; i++) {
     const z = tileToZone(i, rows, cols);
     zTotal[z] = (zTotal[z] ?? 0) + 1;
-    if ((cov.get(i) ?? 0) >= 1) zCov[z] = (zCov[z] ?? 0) + 1;
+    const c = cov.get(i) ?? 0;
+    if (c >= 1) zCov[z] = (zCov[z] ?? 0) + 1;
+    coverMass[z] = (coverMass[z] ?? 0) + c;
   }
   const zoneCoverRatio: Record<string, number> = {};
   for (const z of ZONE_KEYS) zoneCoverRatio[z] = (zCov[z] ?? 0) / zTotal[z];
@@ -101,6 +116,7 @@ export function computeMetrics(
 
   return {
     coveragePct,
+    riskWeightedCoverage,
     riskZoneCount,
     overcrowdTiles,
     balance,
@@ -109,6 +125,7 @@ export function computeMetrics(
     rightMass: right,
     riskExposure,
     zoneCoverRatio,
+    coverMass,
     attShare: attMass / (tot || 1),
     midShare: midMass / (tot || 1),
     defShare: defMass / (tot || 1),

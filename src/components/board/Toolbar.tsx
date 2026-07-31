@@ -4,6 +4,7 @@ import type { Tool } from '../../state/types';
 import { ViewModeToggle } from './ViewModeToggle';
 import { PhaseToggle } from './PhaseToggle';
 import { PlayerChips } from './PlayerChips';
+import { teamFilled, teamBudget } from '../../lib/budget';
 
 const TOOLS: { t: Tool; label: string; icon: string; hint: string }[] = [
   { t: 'brush', label: '브러시', icon: '🖌️', hint: '드래그로 칠하기' },
@@ -19,6 +20,11 @@ export function Toolbar() {
   const resetPhase = useStore((s) => s.resetPhase);
   const reseedPhase = useStore((s) => s.reseedPhase);
   const historyLen = useStore((s) => s.history.length);
+  const phase = useStore((s) => s.phase);
+  const zones = useStore((s) => s.zones[phase]);
+  const { rows, cols } = useStore((s) => s.resolution);
+  const filled = teamFilled(zones);
+  const total = teamBudget(rows, cols);
 
   return (
     <aside className="flex w-[228px] shrink-0 flex-col gap-4 overflow-y-auto rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5">
@@ -83,8 +89,19 @@ export function Toolbar() {
       </div>
 
       <div className="border-t border-slate-100 pt-3">
-        <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted">
-          선수 (10명 + GK)
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-[11px] font-semibold uppercase tracking-wide text-muted">
+            선수 (10명 + GK)
+          </span>
+          <span className="text-[11px] font-semibold tabular-nums text-brand">
+            팀 예산 {filled}/{total}
+          </span>
+        </div>
+        <div className="mb-2.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
+          <div
+            className="h-full rounded-full bg-brand transition-all"
+            style={{ width: `${Math.min((filled / total) * 100, 100)}%` }}
+          />
         </div>
         <PlayerChips />
       </div>

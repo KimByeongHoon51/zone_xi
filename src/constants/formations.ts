@@ -1,6 +1,7 @@
 // constants/formations.ts — 포메이션 프리셋 (건너뛰기용, 구현 명세서 2·17장)
 import type { Player, Position, PhaseZones } from '../state/types';
 import { assignColor } from './palette';
+import { CONFIG } from './config';
 
 // 선수 정의: 등번호·포지션·이름·기본 활동 영역(비율 박스, 해상도 무관)
 interface Seed {
@@ -108,14 +109,41 @@ export function buildPlayers(formation: FormationName = '4-3-3'): Player[] {
   });
 }
 
-// 포메이션 기본 수비 배치 시드
+// 박스 시드를 예산(B) 이하로 캡: 박스 중심에 가장 가까운 B칸만 남긴다.
+// 강제 공백(§13) 원칙상 기본 배치의 각 선수 칸 수는 반드시 B 이하여야 한다.
+function capToBudget(
+  set: Set<number>,
+  box: [number, number, number, number],
+  rows: number,
+  cols: number,
+  budget: number
+): Set<number> {
+  if (set.size <= budget) return set;
+  const [r0, r1, c0, c1] = box;
+  const cr = ((r0 + r1) / 2) * rows; // 박스 중심 (타일 좌표계)
+  const cc = ((c0 + c1) / 2) * cols;
+  const scored = [...set].map((idx) => {
+    const row = Math.floor(idx / cols) + 0.5;
+    const col = (idx % cols) + 0.5;
+    return { idx, d: (row - cr) ** 2 + (col - cc) ** 2 };
+  });
+  scored.sort((a, b) => a.d - b.d);
+  return new Set(scored.slice(0, budget).map((s) => s.idx));
+}
+
+// 포메이션 기본 수비 배치 시드 (각 필드 플레이어 ≤ 예산)
 export function buildDefaultZones(
   rows: number,
   cols: number,
   formation: FormationName = '4-3-3'
 ): PhaseZones {
   const pz: PhaseZones = {};
-  for (const s of PRESETS[formation]) pz[s.no] = boxToSet(s.box, rows, cols);
+  const B = CONFIG.tileBudget(rows, cols);
+  for (const s of PRESETS[formation]) {
+    const raw = boxToSet(s.box, rows, cols);
+    // GK는 예산 대상 아님(잠금·소형). 필드 플레이어만 캡.
+    pz[s.no] = s.position === 'GK' ? raw : capToBudget(raw, s.box, rows, cols, B);
+  }
   return pz;
 }
 

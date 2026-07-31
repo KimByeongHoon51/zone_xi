@@ -47,6 +47,15 @@ export function LiveFeedback() {
   const setView = useStore((s) => s.setView);
   const tend = tendencyTag(m, m.overcrowdTiles);
 
+  // 면적 vs 위험 가중 커버 비교 메시지 (예측 아님, 결과 서술)
+  const delta = m.riskWeightedCoverage - m.coveragePct;
+  const coverMsg =
+    delta >= 3
+      ? '위험 가중 > 면적 — 중요한 구역을 우선 덮고 있습니다.'
+      : delta <= -3
+        ? '위험 가중 < 면적 — 안전지대 위주로 덮여 중요 구역에 빈틈이 있습니다.'
+        : '면적과 위험 가중 커버가 비슷합니다.';
+
   const worstRisk =
     m.riskZones.length > 0
       ? [...m.riskZones].sort(
@@ -57,7 +66,7 @@ export function LiveFeedback() {
       : null;
 
   return (
-    <aside className="flex min-h-0 w-full flex-1 flex-col gap-3 overflow-y-auto rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5">
+    <aside className="flex w-full shrink-0 flex-col gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5">
       <div>
         <div className="text-[11px] font-semibold uppercase tracking-wide text-muted">
           실시간 반응
@@ -70,24 +79,36 @@ export function LiveFeedback() {
         </div>
       </div>
 
+      {/* 면적 vs 위험 가중 커버 (C) */}
       <div className="grid grid-cols-2 gap-2">
-        <Stat label="커버리지" value={`${m.coveragePct}%`} hint="칠한 타일 비율" />
+        <Stat label="면적 커버" value={`${m.coveragePct}%`} hint="칠한 타일 비율" />
+        <Stat
+          label="위험 가중 커버"
+          value={`${m.riskWeightedCoverage}%`}
+          hint="중요 구역 우선도"
+        />
+      </div>
+      <div className="rounded-md bg-brand/5 px-2.5 py-1.5 text-[11px] leading-relaxed text-brand">
+        {coverMsg}
+      </div>
+
+      <div className="grid grid-cols-3 gap-2">
         <Stat
           label="위험 구역"
           value={`${m.riskZoneCount}곳`}
           tone={m.riskZoneCount > 0 ? 'warn' : 'ok'}
-          hint="고위험 + 공백"
+          hint="고위험+공백"
         />
         <Stat
           label="과밀 칸"
-          value={`${m.overcrowdTiles}칸`}
+          value={`${m.overcrowdTiles}`}
           tone={m.overcrowdTiles > 0 ? 'over' : 'ok'}
-          hint="3명 이상 겹침"
+          hint="여유 정보"
         />
         <Stat
           label="좌우"
           value={m.tilt === '균형' ? '균형' : m.tilt.slice(0, 2)}
-          hint={`좌 ${m.leftMass} · 우 ${m.rightMass}`}
+          hint={`${m.leftMass}·${m.rightMass}`}
         />
       </div>
 

@@ -9,6 +9,8 @@ import { PitchGrid } from '../components/pitch/PitchGrid';
 import { TendencyTag } from '../components/report/TendencyTag';
 import { MetricRow } from '../components/report/MetricRow';
 import { FindingList } from '../components/report/Suggestions';
+import { SimilarityCard } from '../components/board/SimilarityCard';
+import { teamFilled, teamBudget } from '../lib/budget';
 import { ZONE_EVIDENCE, ZONE_NAMES } from '../constants/zones';
 import { COPY } from '../constants/copy';
 
@@ -34,6 +36,9 @@ export function Report() {
     .map((z) => ({ zone: z, text: ZONE_EVIDENCE[z] }))
     .filter((e) => e.text);
 
+  const filled = teamFilled(zones);
+  const total = teamBudget(rows, cols);
+
   return (
     <div className="min-h-screen bg-[#f1f5f2] pb-16">
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/90 px-6 py-3 backdrop-blur">
@@ -56,9 +61,10 @@ export function Report() {
 
       <div className="mx-auto max-w-5xl px-6 pt-6">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-[minmax(0,300px)_1fr]">
-          {/* 왼쪽: 밀집도 지도 + 성향 */}
+          {/* 왼쪽: 성향 → 가장 가까운 형태 → 밀집도 지도 */}
           <div className="space-y-4">
             <TendencyTag t={tend} />
+            <SimilarityCard variant="headline" />
             <div className="rounded-xl bg-white p-3 shadow-sm ring-1 ring-black/5">
               <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted">
                 밀집도 지도
@@ -113,7 +119,7 @@ export function Report() {
               <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted">
                 지표
               </div>
-              <MetricRow m={m} />
+              <MetricRow m={m} filled={filled} total={total} />
             </div>
           </div>
         </div>
