@@ -64,8 +64,8 @@ export function TileBottomSheet({ idx }: Props) {
     weight >= 0.7 ? 'text-warn' : weight >= 0.3 ? 'text-overcrowd' : 'text-subtle';
 
   return (
-    <div className="shrink-0 rounded-xl bg-white p-3.5 shadow-sm ring-1 ring-black/5">
-      <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted">
+    <div className="shrink-0 rounded-xl bg-white px-3.5 py-2.5 shadow-sm ring-1 ring-black/5">
+      <div className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-muted">
         타일 정보
       </div>
       <div className="flex items-start justify-between gap-3">
@@ -78,7 +78,7 @@ export function TileBottomSheet({ idx }: Props) {
             </span>
           </div>
         </div>
-        <div className="shrink-0 rounded-md bg-slate-100 px-2.5 py-1 text-center">
+        <div className="shrink-0 rounded-md bg-slate-100 px-2 py-0.5 text-center">
           <div className="text-[10px] text-muted">현재 커버</div>
           <div
             className={`text-sm font-bold ${
@@ -94,12 +94,12 @@ export function TileBottomSheet({ idx }: Props) {
         </div>
       </div>
 
-      <div className="mt-2 rounded-md bg-brand/5 px-2.5 py-1.5 text-[11px] text-brand">
+      <div className="mt-1.5 rounded-md bg-brand/5 px-2.5 py-1 text-[11px] leading-snug text-brand">
         📊 근거 · {evidence}
       </div>
 
       {sub && (
-        <div className="mt-1.5 text-[10.5px] text-muted">
+        <div className="mt-1 text-[10.5px] leading-snug text-muted">
           <span className="opacity-70">역할(정적 매핑, 측정값 아님):</span>{' '}
           <span className="text-subtle">
             {sub.role} — {sub.note} · 수비 대응: {sub.defend}
@@ -107,7 +107,7 @@ export function TileBottomSheet({ idx }: Props) {
         </div>
       )}
 
-      <div className="mt-1.5 text-[12px] leading-relaxed text-ink">{comment}</div>
+      <div className="mt-1 text-[12px] leading-snug text-ink">{comment}</div>
     </div>
   );
 }

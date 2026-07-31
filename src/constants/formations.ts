@@ -20,48 +20,48 @@ const GK_SEED: Seed = {
   box: [0.9, 1.0, 0.3, 0.7],
 };
 
-// 4-3-3
+// 4-3-3 — 균형형 (백라인을 살짝 올려 서드가 고르게 분포)
 const F_433: Seed[] = [
   { no: 11, position: 'FW', name: 'LW', box: [0.0, 0.42, 0.0, 0.35] },
   { no: 9, position: 'FW', name: 'ST', box: [0.0, 0.4, 0.28, 0.72] },
   { no: 7, position: 'FW', name: 'RW', box: [0.0, 0.42, 0.65, 1.0] },
-  { no: 8, position: 'MF', name: 'LCM', box: [0.32, 0.68, 0.12, 0.5] },
-  { no: 6, position: 'MF', name: 'CM', box: [0.34, 0.7, 0.3, 0.7] },
-  { no: 10, position: 'MF', name: 'RCM', box: [0.32, 0.68, 0.5, 0.88] },
-  { no: 3, position: 'DF', name: 'LB', box: [0.58, 1.0, 0.0, 0.32] },
-  { no: 4, position: 'DF', name: 'LCB', box: [0.66, 1.0, 0.2, 0.55] },
-  { no: 5, position: 'DF', name: 'RCB', box: [0.66, 1.0, 0.45, 0.8] },
-  { no: 2, position: 'DF', name: 'RB', box: [0.58, 1.0, 0.68, 1.0] },
+  { no: 8, position: 'MF', name: 'LCM', box: [0.3, 0.66, 0.12, 0.5] },
+  { no: 6, position: 'MF', name: 'CM', box: [0.32, 0.68, 0.3, 0.7] },
+  { no: 10, position: 'MF', name: 'RCM', box: [0.3, 0.66, 0.5, 0.88] },
+  { no: 3, position: 'DF', name: 'LB', box: [0.5, 0.9, 0.0, 0.32] },
+  { no: 4, position: 'DF', name: 'LCB', box: [0.56, 0.92, 0.2, 0.55] },
+  { no: 5, position: 'DF', name: 'RCB', box: [0.56, 0.92, 0.45, 0.8] },
+  { no: 2, position: 'DF', name: 'RB', box: [0.5, 0.9, 0.68, 1.0] },
   GK_SEED,
 ];
 
-// 4-4-2
+// 4-4-2 — 견고한 블록 (수비 서드에 질량 집중 + 중앙 미드 분리로 과밀 낮게)
 const F_442: Seed[] = [
   { no: 9, position: 'FW', name: 'ST', box: [0.0, 0.4, 0.16, 0.55] },
   { no: 10, position: 'FW', name: 'ST', box: [0.0, 0.4, 0.45, 0.84] },
-  { no: 7, position: 'MF', name: 'RM', box: [0.32, 0.7, 0.62, 1.0] },
-  { no: 11, position: 'MF', name: 'LM', box: [0.32, 0.7, 0.0, 0.38] },
-  { no: 8, position: 'MF', name: 'CM', box: [0.34, 0.72, 0.28, 0.72] },
-  { no: 6, position: 'FW', name: 'CM', box: [0.4, 0.74, 0.3, 0.7] },
-  { no: 3, position: 'DF', name: 'LB', box: [0.58, 1.0, 0.0, 0.32] },
-  { no: 4, position: 'DF', name: 'LCB', box: [0.66, 1.0, 0.2, 0.55] },
-  { no: 5, position: 'DF', name: 'RCB', box: [0.66, 1.0, 0.45, 0.8] },
-  { no: 2, position: 'DF', name: 'RB', box: [0.58, 1.0, 0.68, 1.0] },
+  { no: 7, position: 'MF', name: 'RM', box: [0.34, 0.72, 0.64, 1.0] },
+  { no: 11, position: 'MF', name: 'LM', box: [0.34, 0.72, 0.0, 0.36] },
+  { no: 8, position: 'MF', name: 'CM', box: [0.28, 0.58, 0.22, 0.58] },
+  { no: 6, position: 'FW', name: 'DM', box: [0.52, 0.84, 0.42, 0.78] },
+  { no: 3, position: 'DF', name: 'LB', box: [0.6, 1.0, 0.0, 0.32] },
+  { no: 4, position: 'DF', name: 'LCB', box: [0.68, 1.0, 0.2, 0.55] },
+  { no: 5, position: 'DF', name: 'RCB', box: [0.68, 1.0, 0.45, 0.8] },
+  { no: 2, position: 'DF', name: 'RB', box: [0.6, 1.0, 0.68, 1.0] },
   GK_SEED,
 ];
 
-// 3-5-2
+// 3-5-2 — 중앙 봉쇄 (중원·중앙에 질량 집중, 측면 질량 얕음)
 const F_352: Seed[] = [
-  { no: 9, position: 'FW', name: 'ST', box: [0.0, 0.4, 0.16, 0.55] },
-  { no: 10, position: 'FW', name: 'ST', box: [0.0, 0.4, 0.45, 0.84] },
-  { no: 7, position: 'MF', name: 'RWB', box: [0.36, 0.82, 0.66, 1.0] },
-  { no: 3, position: 'MF', name: 'LWB', box: [0.36, 0.82, 0.0, 0.34] },
-  { no: 8, position: 'MF', name: 'LCM', box: [0.34, 0.72, 0.16, 0.52] },
-  { no: 6, position: 'MF', name: 'CM', box: [0.36, 0.74, 0.3, 0.7] },
-  { no: 11, position: 'FW', name: 'RCM', box: [0.34, 0.72, 0.48, 0.84] },
-  { no: 4, position: 'DF', name: 'LCB', box: [0.66, 1.0, 0.06, 0.42] },
-  { no: 5, position: 'DF', name: 'CB', box: [0.68, 1.0, 0.32, 0.68] },
-  { no: 2, position: 'DF', name: 'RCB', box: [0.66, 1.0, 0.58, 0.94] },
+  { no: 9, position: 'FW', name: 'ST', box: [0.0, 0.4, 0.2, 0.58] },
+  { no: 10, position: 'FW', name: 'ST', box: [0.0, 0.4, 0.42, 0.8] },
+  { no: 7, position: 'MF', name: 'RWB', box: [0.36, 0.82, 0.6, 0.94] },
+  { no: 3, position: 'MF', name: 'LWB', box: [0.36, 0.82, 0.06, 0.4] },
+  { no: 8, position: 'MF', name: 'LCM', box: [0.32, 0.62, 0.16, 0.5] },
+  { no: 6, position: 'MF', name: 'DM', box: [0.5, 0.82, 0.32, 0.68] },
+  { no: 11, position: 'FW', name: 'RCM', box: [0.32, 0.62, 0.5, 0.84] },
+  { no: 4, position: 'DF', name: 'LCB', box: [0.66, 1.0, 0.12, 0.46] },
+  { no: 5, position: 'DF', name: 'CB', box: [0.68, 1.0, 0.33, 0.67] },
+  { no: 2, position: 'DF', name: 'RCB', box: [0.66, 1.0, 0.54, 0.88] },
   GK_SEED,
 ];
 

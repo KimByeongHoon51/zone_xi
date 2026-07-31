@@ -1,7 +1,13 @@
 // screens/Setup.tsx — S2 설정 (해상도·포메이션 선택, 구현 명세서 2·17장)
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useStore } from '../state/store';
-import { FORMATIONS, type FormationName } from '../constants/formations';
+import {
+  FORMATIONS,
+  buildDefaultZones,
+  type FormationName,
+} from '../constants/formations';
+import { computeMetrics } from '../lib/metrics';
+import { tendencyTag } from '../lib/tendency';
 import { COPY } from '../constants/copy';
 
 const FORMATION_DESC: Record<FormationName, string> = {
@@ -13,7 +19,19 @@ const FORMATION_DESC: Record<FormationName, string> = {
 export function Setup() {
   const setStep = useStore((s) => s.setStep);
   const goBoard = useStore((s) => s.goBoard);
+  const { rows, cols } = useStore((s) => s.resolution);
   const [formation, setFormation] = useState<FormationName>('4-3-3');
+
+  // 각 포메이션의 기본 배치가 만드는 성향 태그를 미리 계산해 보여준다.
+  const tendencies = useMemo(() => {
+    const map = {} as Record<FormationName, string>;
+    for (const f of FORMATIONS) {
+      const z = buildDefaultZones(rows, cols, f);
+      const m = computeMetrics(z, rows, cols);
+      map[f] = tendencyTag(m, m.overcrowdTiles).tag;
+    }
+    return map;
+  }, [rows, cols]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#f1f5f2] px-6 py-10">
@@ -64,8 +82,13 @@ export function Setup() {
                     : 'border-slate-200 hover:border-slate-300'
                 }`}
               >
-                <div className="text-xl font-extrabold text-ink">{f}</div>
-                <div className="mt-1 text-[11px] leading-relaxed text-subtle">
+                <div className="flex items-center justify-between">
+                  <div className="text-xl font-extrabold text-ink">{f}</div>
+                </div>
+                <div className="mt-1.5 inline-flex items-center rounded-full bg-brand/10 px-2 py-0.5 text-[11px] font-bold text-brand">
+                  {tendencies[f]}
+                </div>
+                <div className="mt-1.5 text-[11px] leading-relaxed text-subtle">
                   {FORMATION_DESC[f]}
                 </div>
               </button>

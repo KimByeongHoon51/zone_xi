@@ -50,7 +50,7 @@ export function SimilarityCard({ variant = 'panel' }: Props) {
   const wrap =
     variant === 'headline'
       ? 'rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5'
-      : 'shrink-0 rounded-xl bg-white p-3.5 shadow-sm ring-1 ring-black/5';
+      : 'shrink-0 rounded-xl bg-white px-3.5 py-2 shadow-sm ring-1 ring-black/5';
 
   // 미노출(게이팅): 안내 문구만
   if (!view.show) {
@@ -77,7 +77,7 @@ export function SimilarityCard({ variant = 'panel' }: Props) {
           <TeamRow key={t.key} t={t} lead={i === 0} />
         ))}
       </div>
-      <p className="mt-2 border-t border-slate-100 pt-2 text-[10px] leading-relaxed text-muted">
+      <p className="mt-1.5 border-t border-slate-100 pt-1.5 text-[10px] leading-snug text-muted">
         수비 커버 프로파일 근사와의 <b>형태 유사도</b>이며, 수비 우열·승률과는
         무관합니다.
       </p>

@@ -24,21 +24,21 @@ function Stat({
         ? 'text-overcrowd'
         : 'text-ink';
   return (
-    <div className="rounded-lg bg-slate-50 p-3">
+    <div className="rounded-lg bg-slate-50 px-2.5 py-1.5">
       <div className="text-[11px] font-medium text-subtle">{label}</div>
-      <div className={`mt-0.5 text-2xl font-bold tabular-nums ${color}`}>
+      <div className={`text-xl font-bold leading-tight tabular-nums ${color}`}>
         {value}
       </div>
-      {hint && <div className="mt-0.5 text-[10px] text-muted">{hint}</div>}
+      {hint && <div className="text-[10px] leading-tight text-muted">{hint}</div>}
     </div>
   );
 }
 
 const LEGEND = [
-  { c: DENSITY_SCALE[0], t: '0명 · 공백' },
-  { c: DENSITY_SCALE[1], t: '1명 · 적정' },
-  { c: DENSITY_SCALE[2], t: '2명 · 두꺼움' },
-  { c: DENSITY_SCALE[3], t: '3명↑ · 과밀' },
+  { c: DENSITY_SCALE[0], t: '0 공백' },
+  { c: DENSITY_SCALE[1], t: '1 적정' },
+  { c: DENSITY_SCALE[2], t: '2 두껍' },
+  { c: DENSITY_SCALE[3], t: '3+과밀' },
 ];
 
 export function LiveFeedback() {
@@ -66,13 +66,13 @@ export function LiveFeedback() {
       : null;
 
   return (
-    <aside className="flex w-full shrink-0 flex-col gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5">
+    <aside className="flex w-full shrink-0 flex-col gap-1.5 rounded-xl bg-white p-3.5 shadow-sm ring-1 ring-black/5">
       <div>
         <div className="text-[11px] font-semibold uppercase tracking-wide text-muted">
           실시간 반응
         </div>
         <div className="mt-1 flex items-center gap-2">
-          <span className="rounded-full bg-brand px-2.5 py-1 text-sm font-bold text-white">
+          <span className="rounded-full bg-brand px-2.5 py-0.5 text-sm font-bold text-white">
             {tend.tag}
           </span>
           <span className="text-[11px] text-muted">{tend.ref}</span>
@@ -88,7 +88,7 @@ export function LiveFeedback() {
           hint="중요 구역 우선도"
         />
       </div>
-      <div className="rounded-md bg-brand/5 px-2.5 py-1.5 text-[11px] leading-relaxed text-brand">
+      <div className="rounded-md bg-brand/5 px-2.5 py-1 text-[11px] leading-snug text-brand">
         {coverMsg}
       </div>
 
@@ -113,12 +113,9 @@ export function LiveFeedback() {
       </div>
 
       {worstRisk && (
-        <div className="rounded-lg border border-warn/30 bg-warn/5 p-3">
+        <div className="rounded-lg border border-warn/30 bg-warn/5 px-2.5 py-2">
           <div className="text-[11px] font-semibold text-warn">
-            ⚠ 가장 위험한 공백
-          </div>
-          <div className="mt-0.5 text-sm font-semibold text-ink">
-            {ZONE_NAMES[worstRisk]}
+            ⚠ 가장 위험한 공백 · {ZONE_NAMES[worstRisk]}
           </div>
           <div className="mt-0.5 text-[11px] text-subtle">
             이 구역이 비면 상대 슈팅이 집중되는 자리입니다.
@@ -138,22 +135,21 @@ export function LiveFeedback() {
             {view === 'density' ? '편집으로' : '밀집도 보기'}
           </button>
         </div>
-        <div className="grid grid-cols-2 gap-1.5">
+        <div className="grid grid-cols-4 gap-1">
           {LEGEND.map((l) => (
-            <div key={l.t} className="flex items-center gap-1.5">
+            <div key={l.t} className="flex items-center gap-1">
               <span
-                className="h-3.5 w-3.5 rounded-sm ring-1 ring-black/10"
+                className="h-3 w-3 shrink-0 rounded-sm ring-1 ring-black/10"
                 style={{ background: l.c }}
               />
-              <span className="text-[11px] text-subtle">{l.t}</span>
+              <span className="text-[10px] text-subtle">{l.t}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <p className="mt-auto border-t border-slate-100 pt-2.5 text-[10px] leading-relaxed text-muted">
-        커버리지·위험 구역·과밀은 <b>공간 배분의 일관성</b>만 나타냅니다. 압박
-        강도·전환 속도·개인 기량은 측정 범위 밖입니다.
+      <p className="border-t border-slate-100 pt-1.5 text-[10px] leading-snug text-muted">
+        <b>공간 배분의 일관성</b>만 진단합니다. (압박·기량·전환은 측정 밖)
       </p>
     </aside>
   );
