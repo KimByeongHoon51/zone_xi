@@ -64,8 +64,12 @@ export function Report() {
                 밀집도 지도
               </div>
               <div className="flex justify-center">
-                <div style={{ height: 360 }} className="relative">
-                  <PitchGrid interactive={false} forceView="density" />
+                <div className="relative">
+                  <PitchGrid
+                    interactive={false}
+                    forceView="density"
+                    height="min(56vh, 420px)"
+                  />
                 </div>
               </div>
               <p className="mt-2 text-center text-[10px] text-muted">

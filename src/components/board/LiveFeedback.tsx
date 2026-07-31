@@ -57,7 +57,7 @@ export function LiveFeedback() {
       : null;
 
   return (
-    <aside className="flex w-[300px] shrink-0 flex-col gap-3 overflow-y-auto rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5">
+    <aside className="flex min-h-0 w-full flex-1 flex-col gap-3 overflow-y-auto rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5">
       <div>
         <div className="text-[11px] font-semibold uppercase tracking-wide text-muted">
           실시간 반응

@@ -9,9 +9,15 @@ interface Props {
   onHoverTile?: (idx: number | null) => void;
   interactive?: boolean; // false면 리포트 스냅샷용(정적)
   forceView?: 'edit' | 'density'; // 스냅샷에서 뷰 강제
+  height?: string; // 판 높이 (기본 편집판, 스냅샷에서 축소용)
 }
 
-export function PitchGrid({ onHoverTile, interactive = true, forceView }: Props) {
+export function PitchGrid({
+  onHoverTile,
+  interactive = true,
+  forceView,
+  height = 'min(84vh, 780px)',
+}: Props) {
   const { rows, cols } = useStore((s) => s.resolution);
   const phase = useStore((s) => s.phase);
   const storeView = useStore((s) => s.view);
@@ -114,7 +120,7 @@ export function PitchGrid({ onHoverTile, interactive = true, forceView }: Props)
       className="relative touch-none no-select select-none overflow-hidden rounded-lg shadow-xl ring-1 ring-black/10"
       style={{
         aspectRatio: `${cols} / ${rows}`,
-        height: 'min(84vh, 780px)',
+        height,
         display: 'grid',
         gridTemplateColumns: `repeat(${cols}, 1fr)`,
         gridTemplateRows: `repeat(${rows}, 1fr)`,
